@@ -1,16 +1,8 @@
 <template>
   <Form action="submit" @submit="checkForm" v-slot="{ errors }">
-    <Field
-      name="firstname"
-      placeholder="First Name *"
-      rules="required"
-    />
+    <Field name="firstname" placeholder="First Name *" rules="required" />
     <span>{{ errors.firstname }}</span>
-    <Field
-      name="lastname"
-      placeholder="Last Name *"
-      rules="required"
-    />
+    <Field name="lastname" placeholder="Last Name *" rules="required" />
     <span>{{ errors.lastname }}</span>
     <Field name="company" placeholder="Company" rules="required" />
     <span>{{ errors.company }}</span>
@@ -18,7 +10,7 @@
       name="email"
       type="email"
       placeholder="Business E-mail*"
-      rules="required"
+      rules="required|email"
     />
     <span>{{ errors.email }}</span>
     <Field type="number" name="phone" placeholder="Phone" rules="required" />
@@ -50,29 +42,10 @@
 
 <script>
 import { Field, Form, defineRule } from "vee-validate";
-defineRule("confirmed", (value, [target]) => {
-  if (value === target) {
-    return true;
-  }
-  return "Passwords must match";
+import rules from "@vee-validate/rules";
+Object.keys(rules).forEach((rule) => {
+  defineRule(rule, rules[rule]);
 });
-defineRule("required", (value) => {
-  if (!value || !value.length) {
-    return "This field is required";
-  }
-  return true;
-});
-// defineRule("email", (value) => {
-//   // Field is empty, should pass
-//   if (!value || !value.length) {
-//     return true;
-//   }
-//   // Check if email
-//   if (!/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/.test(value)) {
-//     return "This field must be a valid email";
-//   }
-//   return true;
-// });
 export default {
   components: {
     Field,
